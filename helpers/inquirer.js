@@ -1,7 +1,5 @@
-require('colors');
+const { primary } = require('./color');
 const inquirer = require('inquirer');
-
-const primary = (text) => text.cyan;
 
 console.clear();
 

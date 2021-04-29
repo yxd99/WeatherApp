@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { mainInquirer, input, pause, listPlaces } = require('./helpers/inquirer');
+const { primary } = require('./helpers/color');
 const Search = require('./models/search');
 
 const main = async() => {
@@ -17,17 +18,20 @@ const main = async() => {
             case 1:{
                 const wordSearch = await input('Ciudad:');
                 const places = await search.city( wordSearch );
-                const placeSelected = await listPlaces(places);
+                const placeSelected = await listPlaces( places );
                 if(placeSelected == 0) {
                     break;
                 };
                 const infoPlace = places.find( place => place.id == placeSelected);
-                let result = `\nCiudad: ${ infoPlace.name }`;
-                result += `\nLatitud: ${ infoPlace.latitude }`;
-                result += `\nLongitud: ${ infoPlace.longitude }`;
-                result += `\nTemperatura:`;
-                result += `\nMinima:`;
-                result += `\nMaxima:`;
+                const weatherPlace = await search.weatherPlace( infoPlace.latitude, infoPlace.longitude );
+
+                let result = `\n${ primary('Ciudad: ') } ${ infoPlace.name }`;
+                result += `\n${ primary('Latitud: ') } ${ infoPlace.latitude }`;
+                result += `\n${ primary('Longitud: ') } ${ infoPlace.longitude }`;
+                result += `\n${ primary('Clima: ') } ${ weatherPlace.description }`;
+                result += `\n${ primary('Temperatura: ') } ${ weatherPlace.temperature }`;
+                result += `\n${ primary('Temperatura Minima: ') } ${ weatherPlace.temperature_min }`;
+                result += `\n${ primary('Temperatura Maxima: ') } ${ weatherPlace.temperature_max }`;
 
                 console.log(result);
                 break;
