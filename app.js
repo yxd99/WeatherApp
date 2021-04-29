@@ -1,4 +1,5 @@
-const { mainInquirer, input, pause } = require('./helpers/inquirer');
+require('dotenv').config();
+const { mainInquirer, input, pause, listPlaces } = require('./helpers/inquirer');
 const Search = require('./models/search');
 
 const main = async() => {
@@ -14,17 +15,22 @@ const main = async() => {
             }
 
             case 1:{
-                const place = await input('Ciudad:');
-                await search.city( place );
-                
-                let result = `\nCiudad:`;
-                result += `\nLatitud:`;
-                result += `\nLongitud:`;
+                const wordSearch = await input('Ciudad:');
+                const places = await search.city( wordSearch );
+                const placeSelected = await listPlaces(places);
+                if(placeSelected == 0) {
+                    break;
+                };
+                const infoPlace = places.find( place => place.id == placeSelected);
+                let result = `\nCiudad: ${ infoPlace.name }`;
+                result += `\nLatitud: ${ infoPlace.latitude }`;
+                result += `\nLongitud: ${ infoPlace.longitude }`;
                 result += `\nTemperatura:`;
                 result += `\nMinima:`;
                 result += `\nMaxima:`;
 
                 console.log(result);
+                break;
 
             }
         }

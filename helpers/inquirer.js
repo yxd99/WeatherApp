@@ -54,7 +54,7 @@ const checkbox = async( choices, message ) => {
     return checkboxInquirer;
 }
 
-const list = async( choices, message ) => {
+const list = async( choices, message = '' ) => {
     const question = {
         type: 'list',
         name: 'checkboxInquirer',
@@ -81,11 +81,29 @@ const pause = async() => {
     return confirm;
 }
 
+const listPlaces = async(places = []) => {
+    const choices = places.map( (place, i) => {
+        const index = primary(`${i + 1}.`);
+
+        return {
+            value: place.id,
+            name: `${ index } ${ place.name }`
+        }
+    })
+
+    choices.unshift({
+        value: 0,
+        name: `${ primary('0.') } Cancelar`
+    })
+
+    return await list(choices);
+}
 
 module.exports = {
     mainInquirer,
     input,
     checkbox,
     list,
-    pause
+    pause,
+    listPlaces
 }
