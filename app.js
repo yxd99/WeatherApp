@@ -23,19 +23,23 @@ const main = async() => {
                     break;
                 };
                 const infoPlace = places.find( place => place.id == placeSelected);
-                const weatherPlace = await search.weatherPlace( infoPlace.latitude, infoPlace.longitude );
-
-                let result = `\n${ primary('Ciudad: ') } ${ infoPlace.name }`;
-                result += `\n${ primary('Latitud: ') } ${ infoPlace.latitude }`;
-                result += `\n${ primary('Longitud: ') } ${ infoPlace.longitude }`;
-                result += `\n${ primary('Clima: ') } ${ weatherPlace.description }`;
-                result += `\n${ primary('Temperatura: ') } ${ weatherPlace.temperature }`;
-                result += `\n${ primary('Temperatura Minima: ') } ${ weatherPlace.temperature_min }`;
-                result += `\n${ primary('Temperatura Maxima: ') } ${ weatherPlace.temperature_max }`;
-
-                console.log(result);
+                search.addHistory( { ...infoPlace } );
+                const info = await search.showInfo({ ...infoPlace });
+                console.log( info );
                 break;
 
+            }
+
+            case 2: {
+                const history = search.history;
+                const placeSelected = await listPlaces( history );
+                if( placeSelected == 0 ){
+                    break;
+                }
+                const infoPlace = history.find( place => place.id == placeSelected );
+                const info = await search.showInfo({ ...infoPlace });
+                console.log( info );
+                break;
             }
         }
         await pause();
