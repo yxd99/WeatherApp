@@ -95,6 +95,9 @@ class Search {
   }
 
   readDB() {
+    if (!fs.existsSync(this.dbPath)) {
+      return;
+    }
     const config = {
       encoding: "utf-8",
     };
